@@ -1,3 +1,6 @@
 # gitignore for SEO-Word2Vec-LSTM
 
 *.html
+
+__pycache__/
+.ipynb_checkpoints/
