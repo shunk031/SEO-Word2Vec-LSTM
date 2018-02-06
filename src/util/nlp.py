@@ -32,7 +32,7 @@ def make_array(tokens, vocab, add_eos=True):
 
 def transform_to_array(dataset, vocab, with_label=True):
     if with_label:
-        return [(make_array(tokens, vocab), np.array([cls], np.float32))
+        return [(make_array(tokens, vocab), np.array(cls, np.float32))
                 for tokens, cls in dataset]
     else:
         return [make_array(tokens, vocab)

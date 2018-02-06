@@ -47,6 +47,8 @@ def main():
 
     model = L.Classifier(LSTM(n_vocab=len(vocab), n_units=args.unit),
                          lossfun=F.mean_squared_error)
+    model.compute_accuracy = False
+
     if args.gpu >= 0:
         # Make a specified GPU current
         chainer.cuda.get_device_from_id(args.gpu).use()

@@ -20,7 +20,8 @@ class LSTM(chainer.Chain):
 
         super(LSTM, self).__init__()
         with self.init_scope():
-            self.embed = L.EmbedID(n_vocab, self.n_units, ignore_label=-1)
+            self.embed = L.EmbedID(n_vocab, self.n_units, ignore_label=-1,
+                                   initialW=chainer.initializers.Uniform(.25))
             self.lstm = L.NStepLSTM(n_layers=1,
                                     in_size=self.n_units,
                                     out_size=self.n_units,
@@ -29,9 +30,8 @@ class LSTM(chainer.Chain):
 
     def __call__(self, xs):
 
-        h = sequence_embed(self.embed, xs)
-        hx, cx, ys = self.lstm(None, None, h)
-
-        h = self.fc(ys)
+        exs = sequence_embed(self.embed, xs)
+        hx, cx, ys = self.lstm(None, None, exs)
+        h = self.fc(hx[-1])
 
         return h
