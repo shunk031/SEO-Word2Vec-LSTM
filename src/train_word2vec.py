@@ -62,7 +62,7 @@ def main():
     ax.scatter(embedding_x, embedding_y)
 
     for i, (label, x, y) in enumerate(zip(vocab, embedding_x, embedding_y)):
-        ax.annotate(label, xy=(x, y), xytext=(0, 0), textcorrds='offset points')
+        ax.annotate(label, xy=(x, y), xytext=(0, 0), textcoords='offset points')
 
         if i == 100:
             break
