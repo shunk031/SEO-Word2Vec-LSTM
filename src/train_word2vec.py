@@ -1,8 +1,15 @@
 import re
 import gensim
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 from pathlib import Path
+
 from bs4 import BeautifulSoup
+from sklearn.manifold import TSNE
 from tqdm import tqdm
+
 from util.const import HTML_DIR
 
 
@@ -39,8 +46,28 @@ def main():
     sentences = gensim.models.word2vec.LineSentence('tag_and_element.txt')
     model = gensim.models.Word2Vec(sentences)
 
-    import pdb
-    pdb.set_trace()
+    vocab = model.wv.vocab
+    embed_list = [model[v] for v in vocab]
+    X_word2vec = np.vstack(embed_list)
+
+    tsne = TSNE(n_components=2, random_state=0)
+    tsne.fit_transform(X_word2vec)
+
+    fig = plt.figure(figsize=(40, 40))
+    ax = fig.add_subplot(111)
+
+    # 上位100単語をプロット
+    embedding_x = tsne.embedding_[0:100, 0]
+    embedding_y = tsne.embedding_[0:100, 1]
+    ax.scatter(embedding_x, embedding_y)
+
+    for i, (label, x, y) in enumerate(zip(vocab, embedding_x, embedding_y)):
+        ax.annotate(label, xy=(x, y), xytext=(0, 0), textcorrds='offset points')
+
+        if i == 100:
+            break
+
+    plt.savefig('test.png')
 
 
 if __name__ == '__main__':
